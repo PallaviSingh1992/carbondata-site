@@ -64,12 +64,11 @@ $(document).ready(function(){
 
  });
 
-  /*Search box*/
+   /*Search box*/
 
-  $(function() {
-     $( "#search-icon" ).click(function() {
-         $( "#search-box" ).toggle();
-     });
- });
- 
+   $(function() {
+      $( "#search-icon" ).click(function() {
+          $( "#search-box" ).toggle();
+      });
+  });
 
