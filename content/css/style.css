@@ -902,6 +902,33 @@ box-shadow: 0 3px 2px #aaa }
    height: 36px;
 }
 
+#search-box{ position: relative; display: none;}
+.search-block{
+    border: 5px solid #ff943d;
+    padding: 6px;
+    width: 24em;
+    position: absolute;
+    background: #f8f8f8;
+    right: 0;
+
+}
+
+.search-block input[type="text"] {
+    width: 244px;
+    border: 1px solid #ff9443;
+        padding: 0 5px;
+}
+.search-block input[type="submit"] {
+    width: 70px;
+    color: white;
+    background: #ff943d;
+    border: 1px solid #ff943d;
+    font-size: 14px;
+
+}
+
+.search-block input:focus{  border: 1px solid #dd6300;}
+
 /* ------------------- End Documentation Style here*/
 
 
