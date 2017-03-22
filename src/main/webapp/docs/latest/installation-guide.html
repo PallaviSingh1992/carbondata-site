@@ -33,101 +33,100 @@
     <li><p>Spark should be installed and running on all the cluster nodes.</p></li>
     <li><p>CarbonData user should have permission to access HDFS.</p></li>
 </ul><h3>Procedure</h3>
-<ul>
-    <li><p><a
-            href="https://github.com/apache/incubator-carbondata/blob/master/build/README.md" target="_blank">Build
-        the CarbonData</a> project and get the assembly jar from
-        "./assembly/target/scala-2.10/carbondata_xxx.jar" and put in the <code>&quot;&lt;SPARK_HOME&gt;/carbonlib&quot;</code>
-        folder.</p>
-        <p>NOTE: Create the carbonlib folder if it does not exists inside <code>&quot;&lt;SPARK_HOME&gt;&quot;</code>
-            path.</p></li>
-    <li><p>Add the carbonlib folder path in the Spark classpath. (Edit <code>&quot;&lt;SPARK_HOME&gt;/conf/spark-env.sh&quot;</code>
-        file and modify the value of SPARK_CLASSPATH by appending <br/><code>&quot;&lt;SPARK_HOME&gt;/carbonlib/*&quot;</code>
-        to the existing value)</p></li>
-    <li><p>Copy the carbon.properties.template to <code>&quot;&lt;SPARK_HOME&gt;/conf/carbon.properties&quot;</code>
-        folder from "./conf/" of CarbonData repository.</p></li>
-    <li><p>Copy the "carbonplugins" folder to <code>&quot;&lt;SPARK_HOME&gt;/carbonlib&quot;</code>
-        folder from "./processing/" folder of CarbonData repository.</p>
-        <p>NOTE: carbonplugins will contain .kettle folder.</p></li>
-    <li><p>In Spark node, configure the properties mentioned in the following table in <code>&quot;&lt;SPARK_HOME&gt;/conf/spark-defaults.conf&quot;</code>
-        file.</p></li>
-</ul>
-<table class="table table-striped table-bordered">
-    <thead>
-    <tr>
-        <th>Property</th>
-        <th>Description</th>
-        <th>Value</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>carbon.kettle.home</td>
-        <td>Path that will be used by CarbonData internally to create graph for loading the data
-        </td>
-        <td>$SPARK_HOME /carbonlib/carbonplugins</td>
-    </tr>
-    <tr>
-        <td>spark.driver.extraJavaOptions</td>
-        <td>A string of extra JVM options to pass to the driver. For instance, GC settings or other
-            logging.
-        </td>
-        <td>-Dcarbon.properties.filepath=$SPARK_HOME/conf/carbon.properties</td>
-    </tr>
-    <tr>
-        <td>spark.executor.extraJavaOptions</td>
-        <td>A string of extra JVM options to pass to executors. For instance, GC settings or other
-            logging. NOTE: You can enter multiple values separated by space.
-        </td>
-        <td>-Dcarbon.properties.filepath=$SPARK_HOME/conf/carbon.properties</td>
-    </tr>
-    </tbody>
-</table>
-<ul>
-    <li>Add the following properties in <code>&quot;&lt;SPARK_HOME&gt;/conf/&quot;
-        carbon.properties</code>:
+<ol>
+    <li>
+        <p><a href="https://github.com/apache/incubator-carbondata/blob/master/build/README.md">Build the CarbonData</a> project and get the assembly jar from <code>./assembly/target/scala-2.1x/carbondata_xxx.jar</code>.</p>
     </li>
-</ul>
-<table class="table table-striped table-bordered">
-    <thead>
-    <tr>
-        <th>Property</th>
-        <th>Required</th>
-        <th>Description</th>
-        <th>Example</th>
-        <th>Remark</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>carbon.storelocation</td>
-        <td>NO</td>
-        <td>Location where data CarbonData will create the store and write the data in its own
-            format.
-        </td>
-        <td>hdfs://HOSTNAME:PORT/Opt/CarbonStore</td>
-        <td>Propose to set HDFS directory</td>
-    </tr>
-    <tr>
-        <td>carbon.kettle.home</td>
-        <td>YES</td>
-        <td>Path that will be used by CarbonData internally to create graph for loading the data.
-        </td>
-        <td>$SPARK_HOME/carbonlib/carbonplugins</td>
-        <td></td>
-    </tr>
-    </tbody>
-</table>
-<ul>
-    <li>Verify the installation. For example:</li>
-</ul><p><code>
-    ./spark-shell --master spark://HOSTNAME:PORT --total-executor-cores 2
-    --executor-memory 2G
-</code></p><p>NOTE: Make sure you have permissions for CarbonData JARs and files through which
+    <li>
+        <p>Copy <code>./assembly/target/scala-2.1x/carbondata_xxx.jar</code> to <code>$SPARK_HOME/carbonlib</code> folder.</p>
+        <p><strong>NOTE</strong>: Create the carbonlib folder if it does not exist inside <code>$SPARK_HOME</code> path.</p>
+    </li>
+    <li>
+        <p>Add the carbonlib folder path in the Spark classpath. (Edit <code>$SPARK_HOME/conf/spark-env.sh</code> file and modify the value of <code>SPARK_CLASSPATH</code> by appending <code>$SPARK_HOME/carbonlib/*</code> to the existing value)</p>
+    </li>
+    <li>
+        <p>Copy the <code>./conf/carbon.properties.template</code> file from CarbonData repository to <code>$SPARK_HOME/conf/</code> folder and rename the file to <code>carbon.properties</code>.</p>
+    </li>
+    <li>
+        <p>Copy the <code>./processing/carbonplugins</code> folder from CarbonData repository to <code>$SPARK_HOME/carbonlib/</code> folder.</p>
+        <p><strong>NOTE</strong>: carbonplugins will contain .kettle folder.</p>
+    </li>
+    <li>
+        <p>Repeat Step 2 to Step 5 in all the nodes of the cluster.</p>
+    </li>
+    <li>
+        <p>In Spark node[master], configure the properties mentioned in the following table in <code>$SPARK_HOME/conf/spark-defaults.conf</code> file.</p>
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>Property</th>
+                <th>Value</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>carbon.kettle.home</td>
+                <td><code>$SPARK_HOME/carbonlib/carbonplugins</code></td>
+                <td>Path that will be used by CarbonData internally to create graph for loading the data</td>
+            </tr>
+            <tr>
+                <td>spark.driver.extraJavaOptions</td>
+                <td><code>-Dcarbon.properties.filepath=$SPARK_HOME/conf/carbon.properties</code></td>
+                <td>A string of extra JVM options to pass to the driver. For instance, GC settings or other logging.</td>
+            </tr>
+            <tr>
+                <td>spark.executor.extraJavaOptions</td>
+                <td><code>-Dcarbon.properties.filepath=$SPARK_HOME/conf/carbon.properties</code></td>
+                <td>A string of extra JVM options to pass to executors. For instance, GC settings or other logging. <strong>NOTE</strong>: You can enter multiple values separated by space.</td>
+            </tr>
+            </tbody>
+        </table>
+    </li>
+    <li>
+        <p>Add the following properties in <code>$SPARK_HOME/conf/carbon.properties</code> file:</p>
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>Property</th>
+                <th>Required</th>
+                <th>Description</th>
+                <th>Example</th>
+                <th>Remark</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>carbon.storelocation</td>
+                <td>NO</td>
+                <td>Location where data CarbonData will create the store and write the data in its own format.</td>
+                <td>hdfs://HOSTNAME:PORT/Opt/CarbonStore</td>
+                <td>Propose to set HDFS directory</td>
+            </tr>
+            <tr>
+                <td>carbon.kettle.home</td>
+                <td>YES</td>
+                <td>Path that will be used by CarbonData internally to create graph for loading the data.</td>
+                <td><code>$SPARK_HOME/carbonlib/carbonplugins</code></td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </li>
+</ol>
+<ol start="9">
+    <li>
+        <p>Verify the installation. For example:</p>
+        <pre><code>./spark-shell --master spark://HOSTNAME:PORT --total-executor-cores 2
+--executor-memory 2G
+</code></pre>
+    </li>
+</ol>
+<p>NOTE: Make sure you have permissions for CarbonData JARs and files through which
     driver and executor will start.</p><p>To get started with CarbonData : <a
         href="mainpage.html?page=quickStart">Quick Start</a> , <a href="mainpage.html?page=ddl">DDL
     Operations on CarbonData</a></p>
-   <h2 id="installing-yarn-cluster">Installing and Configuring CarbonData on "Spark on YARN"
+<h2 id="installing-yarn-cluster">Installing and Configuring CarbonData on "Spark on YARN"
     Cluster</h2><p>This section provides the procedure to install CarbonData on "Spark on YARN"
     cluster.</p><h3>Prerequisites</h3>
 <ul>
@@ -136,132 +135,118 @@
     <li>CarbonData user should have permission to access HDFS.</li>
 </ul><h3>Procedure</h3><p>The following steps are only for Driver Nodes. (Driver nodes are the one
     which starts the spark context.)</p>
-<ul>
-    <li><p><a
-            href="https://github.com/apache/incubator-carbondata/blob/master/build/README.md" target="_blank">Build
-        the CarbonData</a> project and get the assembly jar from
-        "./assembly/target/scala-2.10/carbondata_xxx.jar" and put in the <code>&quot;&lt;SPARK_HOME&gt;/carbonlib&quot;</code>
-        folder.</p>
-        <p>NOTE: Create the carbonlib folder if it does not exists inside <code>&quot;&lt;SPARK_HOME&gt;&quot;</code>
-            path.</p></li>
-    <li><p>Copy "carbonplugins" folder to <code>&quot;&lt;SPARK_HOME&gt;/carbonlib&quot;</code>
-        folder from "./processing/" folder of CarbonData repository. carbonplugins will contain
-        .kettle folder.</p></li>
-    <li><p>Copy the "carbon.properties.template" to <code>&quot;&lt;SPARK_HOME&gt;/conf/carbon.properties&quot;</code>
-        folder from conf folder of CarbonData repository.</p></li>
-    <li>Modify the parameters in "spark-default.conf" located in the <code>&quot;&lt;SPARK_HOME&gt;/conf</code>"
+<ol>
+    <li>
+        <p><a href="https://github.com/apache/incubator-carbondata/blob/master/build/README.md">Build the CarbonData</a> project and get the assembly jar from <code>./assembly/target/scala-2.1x/carbondata_xxx.jar</code> and copy to <code>$SPARK_HOME/carbonlib</code> folder.</p>
+        <p><strong>NOTE</strong>: Create the carbonlib folder if it does not exists inside <code>$SPARK_HOME</code> path.</p>
     </li>
-</ul>
-<table class="table table-striped table-bordered">
-    <thead>
-    <tr>
-        <th>Property</th>
-        <th>Description</th>
-        <th>Value</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>spark.master</td>
-        <td>Set this value to run the Spark in yarn cluster mode.</td>
-        <td>Set "yarn-client" to run the Spark in yarn cluster mode.</td>
-    </tr>
-    <tr>
-        <td>spark.yarn.dist.files</td>
-        <td>Comma-separated list of files to be placed in the working directory of each executor.
-        </td>
-        <td><code>&quot;&lt;YOUR_SPARK_HOME_PATH&gt;&quot;/conf/carbon.properties</code></td>
-    </tr>
-    <tr>
-        <td>spark.yarn.dist.archives</td>
-        <td>Comma-separated list of archives to be extracted into the working directory of each
-            executor.
-        </td>
-        <td><code>&quot;&lt;YOUR_SPARK_HOME_PATH&gt;&quot;/carbonlib/carbondata_xxx.jar</code></td>
-    </tr>
-    <tr>
-        <td>spark.executor.extraJavaOptions</td>
-        <td>A string of extra JVM options to pass to executors. For instance NOTE: You can enter
-            multiple values separated by space.
-        </td>
-        <td><code>-Dcarbon.properties.filepath=&quot;&lt;YOUR_SPARK_HOME_PATH&gt;&quot;/conf/carbon.properties</code>
-        </td>
-    </tr>
-    <tr>
-        <td>spark.executor.extraClassPath</td>
-        <td>Extra classpath entries to prepend to the classpath of executors. NOTE: If
-            SPARK_CLASSPATH is defined in spark-env.sh, then comment it and append the values in
-            below parameter spark.driver.extraClassPath
-        </td>
-        <td><code>
-            &quot;&lt;YOUR_SPARK_HOME_PATH&gt;&quot;/carbonlib/carbonlib/carbondata_xxx.jar</code>
-        </td>
-    </tr>
-    <tr>
-        <td>spark.driver.extraClassPath</td>
-        <td>Extra classpath entries to prepend to the classpath of the driver. NOTE: If
-            SPARK_CLASSPATH is defined in spark-env.sh, then comment it and append the value in
-            below parameter spark.driver.extraClassPath.
-        </td>
-        <td><code>
-            &quot;&lt;YOUR_SPARK_HOME_PATH&gt;&quot;/carbonlib/carbonlib/carbondata_xxx.jar</code>
-        </td>
-    </tr>
-    <tr>
-        <td>spark.driver.extraJavaOptions</td>
-        <td>A string of extra JVM options to pass to the driver. For instance, GC settings or other
-            logging.
-        </td>
-        <td><code>-Dcarbon.properties.filepath=&quot;&lt;YOUR_SPARK_HOME_PATH&gt;&quot;/conf/carbon.properties</code>
-        </td>
-    </tr>
-    <tr>
-        <td>carbon.kettle.home</td>
-        <td>Path that will be used by CarbonData internally to create graph for loading the data.
-        </td>
-        <td><code>&quot;&lt;YOUR_SPARK_HOME_PATH&gt;&quot;/carbonlib/carbonplugins</code></td>
-    </tr>
-    </tbody>
-</table>
-<ul>
-    <li>Add the following properties in <code>&lt;SPARK_HOME&gt;/conf/ carbon.properties</code>:
+    <li>
+        <p>Copy the <code>./processing/carbonplugins</code> folder from CarbonData repository to <code>$SPARK_HOME/carbonlib/</code> folder.</p>
+        <p><strong>NOTE</strong>: carbonplugins will contain .kettle folder.</p>
     </li>
-</ul>
-<table class="table table-striped table-bordered">
-    <thead>
-    <tr>
-        <th>Property</th>
-        <th>Required</th>
-        <th>Description</th>
-        <th>Example</th>
-        <th>Default Value</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>carbon.storelocation</td>
-        <td>NO</td>
-        <td>Location where CarbonData will create the store and write the data in its own format.
-        </td>
-        <td>hdfs://HOSTNAME:PORT/Opt/CarbonStore</td>
-        <td>Propose to set HDFS directory</td>
-    </tr>
-    <tr>
-        <td>carbon.kettle.home</td>
-        <td>YES</td>
-        <td>Path that will be used by CarbonData internally to create graph for loading the data.
-        </td>
-        <td>$SPARK_HOME/carbonlib/carbonplugins</td>
-        <td></td>
-    </tr>
-    </tbody>
-</table>
-<ul>
-    <li>Verify the installation.</li>
-</ul><p><code>
-    ./bin/spark-shell --master yarn-client --driver-memory 1g
-    --executor-cores 2 --executor-memory 2G
-</code> NOTE: Make sure you have permissions for CarbonData JARs and files through which driver and
+    <li>
+        <p>Copy the <code>./conf/carbon.properties.template</code> file from CarbonData repository to <code>$SPARK_HOME/conf/</code> folder and rename the file to <code>carbon.properties</code>.</p>
+    </li>
+    <li>
+        <p>Create <code>tar,gz</code> file of carbonlib folder and move it inside the carbonlib folder.</p>
+        <pre><code>cd $SPARK_HOME
+tar -zcvf carbondata.tar.gz carbonlib/
+mv carbondata.tar.gz carbonlib/
+</code></pre>
+    </li>
+    <li>
+        <p>Configure the properties mentioned in the following table in <code>$SPARK_HOME/conf/spark-defaults.conf</code> file.</p>
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>Property</th>
+                <th>Description</th>
+                <th>Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>spark.master</td>
+                <td>Set this value to run the Spark in yarn cluster mode.</td>
+                <td>Set yarn-client to run the Spark in yarn cluster mode.</td>
+            </tr>
+            <tr>
+                <td>spark.yarn.dist.files</td>
+                <td>Comma-separated list of files to be placed in the working directory of each executor.</td>
+                <td><code>$SPARK_HOME/conf/carbon.properties</code></td>
+            </tr>
+            <tr>
+                <td>spark.yarn.dist.archives</td>
+                <td>Comma-separated list of archives to be extracted into the working directory of each executor.</td>
+                <td><code>$SPARK_HOME/carbonlib/carbondata.tar.gz</code></td>
+            </tr>
+            <tr>
+                <td>spark.executor.extraJavaOptions</td>
+                <td>A string of extra JVM options to pass to executors. For instance  <strong>NOTE</strong>: You can enter multiple values separated by space.</td>
+                <td><code>-Dcarbon.properties.filepath=carbon.properties</code></td>
+            </tr>
+            <tr>
+                <td>spark.executor.extraClassPath</td>
+                <td>Extra classpath entries to prepend to the classpath of executors. <strong>NOTE</strong>: If SPARK_CLASSPATH is defined in <a href="http://spark-env.sh">spark-env.sh</a>, then comment it and append the values in below parameter spark.driver.extraClassPath</td>
+                <td><code>carbondata.tar.gz/carbonlib/*</code></td>
+            </tr>
+            <tr>
+                <td>spark.driver.extraClassPath</td>
+                <td>Extra classpath entries to prepend to the classpath of the driver. <strong>NOTE</strong>: If SPARK_CLASSPATH is defined in <a href="http://spark-env.sh">spark-env.sh</a>, then comment it and append the value in below parameter spark.driver.extraClassPath.</td>
+                <td><code>$SPARK_HOME/carbonlib/carbonlib/*</code></td>
+            </tr>
+            <tr>
+                <td>spark.driver.extraJavaOptions</td>
+                <td>A string of extra JVM options to pass to the driver. For instance, GC settings or other logging.</td>
+                <td><code>-Dcarbon.properties.filepath=$SPARK_HOME/conf/carbon.properties</code></td>
+            </tr>
+            </tbody>
+        </table>
+    </li>
+</ol>
+<ol start="6">
+    <li>
+        <p>Add the following properties in <code>$SPARK_HOME/conf/carbon.properties</code>:</p>
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>Property</th>
+                <th>Required</th>
+                <th>Description</th>
+                <th>Example</th>
+                <th>Default Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>carbon.storelocation</td>
+                <td>NO</td>
+                <td>Location where CarbonData will create the store and write the data in its own format.</td>
+                <td>hdfs://HOSTNAME:PORT/Opt/CarbonStore</td>
+                <td>Propose to set HDFS directory</td>
+            </tr>
+            <tr>
+                <td>carbon.kettle.home</td>
+                <td>YES</td>
+                <td>Path that will be used by CarbonData internally to create graph for loading the data.</td>
+                <td>carbondata.tar.gz/carbonlib/carbonplugins</td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </li>
+</ol>
+<ol start="7">
+    <li>
+        <p>Verify the installation.</p>
+        <pre><code>  ./bin/spark-shell --master yarn-client --driver-memory 1g
+  --executor-cores 2 --executor-memory 2G
+</code></pre>
+    </li>
+</ol>
+
+<p>
+    NOTE: Make sure you have permissions for CarbonData JARs and files through which driver and
     executor will start.</p><p>Getting started with CarbonData :<a
         href="mainpage.html?page=quickStart">Quick Start</a> , <a href="mainpage.html?page=ddl">DDL Operations on CarbonData</a></p>
 

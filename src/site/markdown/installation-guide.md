@@ -1,22 +1,3 @@
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
-
 # Installation Guide
 This tutorial guides you through the installation and configuration of CarbonData in the following two modes :
 
@@ -40,7 +21,7 @@ followed by :
 
 ### Procedure
 
-1. [Build the CarbonData](https://github.com/apache/incubator-carbondata/blob/master/build/README.md) project and get the assembly jar from `./assembly/target/scala-2.1x/carbondata_xxx.jar`. 
+1. [Build the CarbonData](https://github.com/apache/incubator-carbondata/blob/master/build/README.md) project and get the assembly jar from `./assembly/target/scala-2.1x/carbondata_xxx.jar`.
 
 2. Copy `./assembly/target/scala-2.1x/carbondata_xxx.jar` to `$SPARK_HOME/carbonlib` folder.
 
@@ -55,7 +36,7 @@ followed by :
     **NOTE**: carbonplugins will contain .kettle folder.
 
 6. Repeat Step 2 to Step 5 in all the nodes of the cluster.
-    
+
 7. In Spark node[master], configure the properties mentioned in the following table in `$SPARK_HOME/conf/spark-defaults.conf` file.
 
    | Property | Value | Description |
@@ -165,29 +146,29 @@ To get started with CarbonData : [Quick Start](quick-start-guide.md), [DDL Opera
 | carbon_store_path | This is a parameter to the CarbonThriftServer class. This a HDFS path where CarbonData files will be kept. Strongly Recommended to put same as carbon.storelocation parameter of carbon.properties. | `hdfs://<host_name>:port/user/hive/warehouse/carbon.store` |
 
 **Examples**
-   
+
    * Start with default memory and executors.
 
 ```
-./bin/spark-submit --conf spark.sql.hive.thriftServer.singleSession=true 
---class org.apache.carbondata.spark.thriftserver.CarbonThriftServer 
+./bin/spark-submit --conf spark.sql.hive.thriftServer.singleSession=true
+--class org.apache.carbondata.spark.thriftserver.CarbonThriftServer
 $SPARK_HOME/carbonlib
-/carbondata_2.10-0.1.0-incubating-SNAPSHOT-shade-hadoop2.7.2.jar 
+/carbondata_2.10-0.1.0-incubating-SNAPSHOT-shade-hadoop2.7.2.jar
 hdfs://<host_name>:port/user/hive/warehouse/carbon.store
 ```
-   
+
    * Start with Fixed executors and resources.
 
 ```
-./bin/spark-submit --conf spark.sql.hive.thriftServer.singleSession=true 
---class org.apache.carbondata.spark.thriftserver.CarbonThriftServer 
---num-executors 3 --driver-memory 20g --executor-memory 250g 
---executor-cores 32 
+./bin/spark-submit --conf spark.sql.hive.thriftServer.singleSession=true
+--class org.apache.carbondata.spark.thriftserver.CarbonThriftServer
+--num-executors 3 --driver-memory 20g --executor-memory 250g
+--executor-cores 32
 /srv/OSCON/BigData/HACluster/install/spark/sparkJdbc/lib
-/carbondata_2.10-0.1.0-incubating-SNAPSHOT-shade-hadoop2.7.2.jar 
+/carbondata_2.10-0.1.0-incubating-SNAPSHOT-shade-hadoop2.7.2.jar
 hdfs://<host_name>:port/user/hive/warehouse/carbon.store
 ```
-  
+
 ### Connecting to CarbonData Thrift Server Using Beeline.
 
 ```
@@ -197,4 +178,3 @@ hdfs://<host_name>:port/user/hive/warehouse/carbon.store
      Example
      ./bin/beeline jdbc:hive2://10.10.10.10:10000
 ```
-
