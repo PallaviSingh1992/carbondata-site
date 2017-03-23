@@ -152,6 +152,22 @@
               </resources>
             </configuration>
           </execution>
+          <execution>
+            <id>publish-images</id>
+            <phase>install</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/ver_doc/images</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${basedir}/src/site/markdown/images</directory>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
     </plugins>
