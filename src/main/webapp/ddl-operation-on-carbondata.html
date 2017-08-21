@@ -210,27 +210,27 @@
 <tr>
 <td>db_name</td>
 <td>Name of the database. Database name should consist of alphanumeric characters and underscore(_) special character.</td>
-<td>Yes</td>
+<td>YES</td>
 </tr>
 <tr>
 <td>field_list</td>
 <td>Comma separated List of fields with data type. The field names should consist of alphanumeric characters and underscore(_) special character.</td>
-<td>No</td>
+<td>NO</td>
 </tr>
 <tr>
 <td>table_name</td>
-<td>The name of the table in Database. Table Name should consist of alphanumeric characters and underscore(_) special character.</td>
-<td>No</td>
+<td>The name of the table in Database. Table name should consist of alphanumeric characters and underscore(_) special character.</td>
+<td>NO</td>
 </tr>
 <tr>
 <td>STORED BY</td>
 <td>"org.apache.carbondata.format", identifies and creates a CarbonData table.</td>
-<td>No</td>
+<td>NO</td>
 </tr>
 <tr>
 <td>TBLPROPERTIES</td>
 <td>List of CarbonData table properties.</td>
-<td></td>
+<td>YES</td>
 </tr>
 </tbody>
 </table>
@@ -275,7 +275,13 @@ By default inverted index is enabled. The user can disable the inverted index cr
 <li>
 <p>All dimensions except complex datatype columns are part of multi dimensional key(MDK). This behavior can be overridden by using TBLPROPERTIES. If the user wants to keep any column (except columns of complex datatype) in multi dimensional key then he can keep the columns either in DICTIONARY_EXCLUDE or DICTIONARY_INCLUDE.</p>
 </li>
+<li>
+<p><strong>Sort Columns Configuration</strong></p>
+<p>"SORT_COLUMN" property is for users to specify which columns belong to the MDK index. If user don't specify "SORT_COLUMN" property, by default MDK index be built by using all dimension columns except complex datatype column.</p>
+</li>
 </ul>
+<pre><code>       TBLPROPERTIES ('SORT_COLUMNS'='column1, column3')
+</code></pre>
 <h3>
 <a id="example" class="anchor" href="#example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example:</h3>
 <pre><code>    CREATE TABLE IF NOT EXISTS productSchema.productSalesTable (
@@ -290,8 +296,25 @@ By default inverted index is enabled. The user can disable the inverted index cr
       STORED BY 'carbondata'
       TBLPROPERTIES ('DICTIONARY_EXCLUDE'='storeCity',
                      'DICTIONARY_INCLUDE'='productNumber',
-                     'NO_INVERTED_INDEX'='productBatch')
+                     'NO_INVERTED_INDEX'='productBatch',
+                     'SORT_COLUMNS'='productName,storeCity')
 </code></pre>
+<ul>
+<li><strong>SORT_COLUMNS</strong></li>
+</ul>
+<pre><code>This table property specifies the order of the sort column.
+</code></pre>
+<pre><code>    TBLPROPERTIES('SORT_COLUMNS'='column1, column3')
+</code></pre>
+<p>NOTE:</p>
+<ul>
+<li>
+<p>If this property is not specified, then by default SORT_COLUMNS consist of all dimension (exclude Complex Column).</p>
+</li>
+<li>
+<p>If this property is specified but with empty argument, then the table will be loaded without sort. For example, ('SORT_COLUMNS'='')</p>
+</li>
+</ul>
 <h2>
 <a id="show-table" class="anchor" href="#show-table" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>SHOW TABLE</h2>
 <p>This command can be used to list all the tables in current database or all the tables of a specific database.</p>
@@ -311,7 +334,7 @@ By default inverted index is enabled. The user can disable the inverted index cr
 <tr>
 <td>IN db_Name</td>
 <td>Name of the database. Required only if tables of this specific database are to be listed.</td>
-<td>Yes</td>
+<td>YES</td>
 </tr>
 </tbody>
 </table>
@@ -335,20 +358,24 @@ By default inverted index is enabled. The user can disable the inverted index cr
 <tr>
 <th>Parameter</th>
 <th>Description</th>
+<th>Optional</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>db_Name</td>
 <td>Name of the database. If this parameter is left unspecified, the current database is selected.</td>
+<td>YES</td>
 </tr>
 <tr>
 <td>table_name</td>
 <td>Name of the existing table.</td>
+<td>NO</td>
 </tr>
 <tr>
 <td>new_table_name</td>
 <td>New table name for the existing table.</td>
+<td>NO</td>
 </tr>
 </tbody>
 </table>
@@ -384,20 +411,24 @@ By default inverted index is enabled. The user can disable the inverted index cr
 <tr>
 <th>Parameter</th>
 <th>Description</th>
+<th>Optional</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>db_Name</td>
 <td>Name of the database. If this parameter is left unspecified, the current database is selected.</td>
+<td>YES</td>
 </tr>
 <tr>
 <td>table_name</td>
 <td>Name of the existing table.</td>
+<td>NO</td>
 </tr>
 <tr>
 <td>col_name data_type</td>
 <td>Name of comma-separated column with data type. Column names contain letters, digits, and underscores (_).</td>
+<td>NO</td>
 </tr>
 </tbody>
 </table>
@@ -441,20 +472,24 @@ By default inverted index is enabled. The user can disable the inverted index cr
 <tr>
 <th>Parameter</th>
 <th>Description</th>
+<th>Optional</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>db_Name</td>
 <td>Name of the database. If this parameter is left unspecified, the current database is selected.</td>
+<td>YES</td>
 </tr>
 <tr>
 <td>table_name</td>
 <td>Name of the existing table.</td>
+<td>NO</td>
 </tr>
 <tr>
 <td>col_name</td>
 <td>Name of comma-separated column with data type. Column names contain letters, digits, and underscores (_)</td>
+<td>NO</td>
 </tr>
 </tbody>
 </table>
@@ -481,9 +516,7 @@ By default inverted index is enabled. The user can disable the inverted index cr
 <ul>
 <li><strong>To delete multiple columns:</strong></li>
 </ul>
-<pre><code>   ALTER TABLE carbon DROP COLUMNS (b1,c1);
-</code></pre>
-<pre><code>   ALTER TABLE carbon DROP COLUMNS (b1,c1);
+<pre><code>   ALTER TABLE carbon DROP COLUMNS (c1,d1);
 </code></pre>
 <h3>
 <a id="change-data-type" class="anchor" href="#change-data-type" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><strong>CHANGE DATA TYPE</strong>
@@ -499,24 +532,29 @@ By default inverted index is enabled. The user can disable the inverted index cr
 <tr>
 <th>Parameter</th>
 <th>Description</th>
+<th>Optional</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>db_Name</td>
 <td>Name of the database. If this parameter is left unspecified, the current database is selected.</td>
+<td>YES</td>
 </tr>
 <tr>
 <td>table_name</td>
 <td>Name of the existing table.</td>
+<td>NO</td>
 </tr>
 <tr>
 <td>col_name</td>
 <td>Name of comma-separated column with data type. Column names contain letters, digits, and underscores (_).</td>
+<td>NO</td>
 </tr>
 <tr>
 <td>changed_column_type</td>
 <td>The change in the data type.</td>
+<td>NO</td>
 </tr>
 </tbody>
 </table>
